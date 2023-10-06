@@ -7,14 +7,19 @@ import HomeScreen from "../navigation/Screens/Home";
 import SettingScreen from "../navigation/Screens/SettingScreen";
 import UserScreen from "../navigation/Screens/UserScreen";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import LoginScreen from "./Screens/LoginScreen";
 const homeName = "Home";
 const userName = "Scan";
 const settingsName = "Settings";
 const Tab = createBottomTabNavigator();
 export default function MainContainer() {
+  const [isLogin,setIsLogin]=React.useState(false)
   return (
+
     <NavigationContainer>
-      <Tab.Navigator
+          {
+      isLogin?(
+        <Tab.Navigator
         initialRouteName={homeName}
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
@@ -39,18 +44,24 @@ export default function MainContainer() {
             padding: 10,
             height: 70,
           },
+          headerShown: false,
         })}
-        // tabBarOptions={{
-        //   activeTintColor: "tomato",
-        //   inactiveTintColor: "grey",
-        //   labelStyle: { paddingBottom: 10, fontSize: 10 },
-        //   style: { padding: 10, height: 70 },
-        // }}
+     
       >
         <Tab.Screen name={homeName} component={HomeScreen} />
         <Tab.Screen name={userName} component={UserScreen} />
-        <Tab.Screen name={settingsName} component={SettingScreen} />
+        <Tab.Screen
+    name={settingsName}
+    options={{ tabBarLabel: "Settings" }}
+  >
+    {() => <SettingScreen setIsLogin={setIsLogin} />}
+  </Tab.Screen>
       </Tab.Navigator>
+      ):(
+        <LoginScreen setIsLogin={setIsLogin}/>
+      )
+    }
+     
     </NavigationContainer>
   );
 }
